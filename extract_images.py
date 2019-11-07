@@ -7,12 +7,12 @@ from PIL import Image
 
 i = 0
 species = []
-for file in glob.glob("../Simon/finished_labels_and_img/*.xml"):
+for file in glob.glob("../../Simon/finished_labels_and_img/*.xml"):
     print(file)
     tree = ET.parse(file)
 
 
-    image_orig = Image.open("../Simon/finished_labels_and_img/" + tree.getroot().find("filename").text)
+    image_orig = Image.open("../../Simon/finished_labels_and_img/" + tree.getroot().find("filename").text)
 
 
     objects = tree.getroot().findall("object")

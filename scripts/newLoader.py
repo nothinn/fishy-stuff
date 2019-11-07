@@ -10,7 +10,7 @@ from torch.utils.data import DataLoader
 import torchvision.transforms as transforms
 import torchvision
 
-image_paths = glob.glob('../../extracted')
+image_paths = glob.glob('../../../extracted')
 len(image_paths)
 
 fishies = {"p virens" : 0, "g morhua": 1, "h lanceolatus" : 2}
@@ -25,7 +25,7 @@ class Fishy(torch.utils.data.Dataset):
         data_path : Path to images
     """
 
-    def __init__(self, train, transform, data_path='../../extracted', category_path="../all_fish.txt"):
+    def __init__(self, train, transform, data_path='../../../extracted', category_path="../all_fish.txt"):
         """
         Constructor for Fishy class
 

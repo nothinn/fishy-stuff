@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [[ $1 == "install" ]]; then
+    command ./python -m pip install --user "${@:2}"
+else
+    command ./python -m pip "$@"
+fi

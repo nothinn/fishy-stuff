@@ -13,7 +13,7 @@ import torchvision
 image_paths = glob.glob('../../../extracted')
 len(image_paths)
 
-fishies = {"p virens" : 0, "g morhua": 1, "h lanceolatus" : 2}
+fishies = {"p virens" : 0, "g morhua": 1, "h lanceolatus" : 2, "background" : 3}
 
 class Fishy(torch.utils.data.Dataset):
     """

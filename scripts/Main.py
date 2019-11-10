@@ -13,7 +13,7 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print("Using device: " + device)
 
 height, width = 512, 512
-num_classes   = 3
+num_classes   = 4
 
 channels        = 3        
 kernel_size     = 3

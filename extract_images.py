@@ -17,7 +17,10 @@ for file in glob.glob("../../Simon/finished_labels_and_img/*.xml"):
 
     objects = tree.getroot().findall("object")
 
+    no_obj = True
+    
     for obj in objects:
+        no_obj = False
         name = obj.find("name").text
         bndbox = obj.find("bndbox")
 
@@ -32,6 +35,13 @@ for file in glob.glob("../../Simon/finished_labels_and_img/*.xml"):
 
         species.append(str(i) + "; " + name)
 
+        i += 1
+    
+    if no_obj:
+        background = image_orig
+        background.save("extracted/{}.jpg".format(i))
+
+        species.append(str(i) + "; background")
         i += 1
 
 

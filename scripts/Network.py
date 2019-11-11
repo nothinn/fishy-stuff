@@ -42,7 +42,7 @@ class Net(nn.Module):
                 stride = conv_stride, 
                 padding = conv_pad),
 
-            #nn.BatchNorm2d(num_features = 16),
+            nn.BatchNorm2d(num_features = 16),
 
             nn.MaxPool2d(2),
 
@@ -56,7 +56,7 @@ class Net(nn.Module):
                 stride = conv_stride, 
                 padding = conv_pad),
 
-            #nn.BatchNorm2d(num_features = 32),
+            nn.BatchNorm2d(num_features = 32),
 
             nn.ReLU(),
 

@@ -13,8 +13,8 @@ for file in glob.glob("../../Simon/finished_labels_and_img/*.xml"):
 
 
     image_orig = Image.open("../../Simon/finished_labels_and_img/" + tree.getroot().find("filename").text)
-
-
+    width, height = image_orig.size
+    
     objects = tree.getroot().findall("object")
 
     no_obj = True
@@ -28,6 +28,31 @@ for file in glob.glob("../../Simon/finished_labels_and_img/*.xml"):
         ymax = int(bndbox.find("ymax").text)
         xmin = int(bndbox.find("xmin").text)
         ymin = int(bndbox.find("ymin").text)
+
+        xdist = xmax - xmin
+        ydist = ymax - ymin
+
+        diff = abs(xdist - ydist)
+
+        if xdist >= ydist:
+            ymin -= diff//2
+            ymax += diff//2
+            if ymin < 0:
+                ymin = 0
+                ymax = xdist
+            elif ymax > height:
+                ymax = height
+                ymin = height - xdist
+        else:
+            xmin -= diff//2
+            xmax += diff//2
+            if xmin < 0:
+                xmin = 0
+                xmax = ydist
+            elif xmax > width:
+                xmax = width
+                xmin = width-ydist
+
         
         cropped = image_orig.crop((xmin, ymin, xmax, ymax))
 
@@ -38,7 +63,7 @@ for file in glob.glob("../../Simon/finished_labels_and_img/*.xml"):
         i += 1
     
     if no_obj:
-        background = image_orig
+        background = image_orig.crop((0, 0, min(width, height), min(width, height)))
         background.save("extracted/{}.jpg".format(i))
 
         species.append(str(i) + "; background")

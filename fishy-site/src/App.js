@@ -5,20 +5,22 @@ import './App.css';
 function App() {
   const { handleSubmit, register, errors } = useForm({});
   const [hasError, setErrors] = useState(false);
-  const [pictures, setPlanets] = useState({});
+  const [pictures, setPictures] = useState({"Pictures":[]});
 
   async function fetchData() {
-    const res = await fetch("https://swapi.co/api/planets/4/");
+    const res = await fetch("http://127.0.0.1:5000/");
     res
       .json()
       .then(res => {
-
+          setPictures(res);
         }
         )
-      .catch(err => setErrors(err));
+      .catch(err => {
+        console.log(err);
+        setErrors(err)});
   }
 
-  var demoPictures = {"Pictures": ["/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png"]}
+  // var demoPictures = {"Pictures": ["/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png"]}
 
   useEffect(() =>
     {fetchData()}
@@ -37,7 +39,7 @@ function App() {
       <div className="col-sm-8">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-container">
-            {demoPictures.Pictures.map(function(name, index){
+            {pictures.Pictures.map(function(name, index){
               return (
                 <div key={index} className='flex-item'>
                   <img className="picture" src={name} aria-hidden='' alt='' /><br/>

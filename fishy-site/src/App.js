@@ -5,28 +5,70 @@ import './App.css';
 function App() {
   const { handleSubmit, register, errors } = useForm({});
   const [hasError, setErrors] = useState(false);
-  const [pictures, setPictures] = useState({"Pictures":[]});
-
-  async function fetchData() {
-    const res = await fetch("http://127.0.0.1:5000/");
-    res
-      .json()
-      .then(res => {
-          setPictures(res);
-        }
-        )
-      .catch(err => {
-        console.log(err);
-        setErrors(err)});
+  const [pictures, setPictures] = useState([]);
+  
+  async function fetchData(count) {
+    await fetch("http://127.0.0.1:5000/" + count, {
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    }).then(
+      function(response){
+        console.log(count)
+        response
+          .blob()
+          .then(res => {
+            console.log(res);
+            // console.log("data:image/jpeg;base64," + hexToBase64(res));  
+            // var hej = new Blob([res], {type: "image/jpeg"})
+            let fileReader = new FileReader();
+            fileReader.readAsDataURL(res); 
+            fileReader.onload = () => { 
+              let result = fileReader.result; 
+              console.log(result); 
+              setPictures(oldArray => [...oldArray, {result, count}]);
+            }; 
+            // setPictures('data:image/jpeg;base64,' + hexToBase64(res));
+            }
+            )
+          .catch(err => {
+            setErrors(err)});
+          }
+    )
+    // var ds = await res.json();
+    // console.log(ds);
+    
   }
 
   // var demoPictures = {"Pictures": ["/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png","/hej.png"]}
-
-  useEffect(() =>
-    {fetchData()}
+  
+    useEffect(() =>
+    {
+      for(var i = 0 ; i < 9; i++){
+        fetchData(i)
+      }
+    }
   , []);
+  
+  //setPictures({"Pictures": som})
 
-  const onSubmit = values => console.log(values);
+  const onSubmit = values => {
+    console.log(values)
+    fetch('http://127.0.0.1:5000/', {
+			method: 'POST',
+			body: JSON.stringify(values),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		}).then(response => {
+        window.location.reload()
+				return response.json()
+			}).then(json => {
+				this.setState({
+					user:json
+				});
+			});
+  };
 
   return (
     <div>
@@ -39,17 +81,18 @@ function App() {
       <div className="col-sm-8">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-container">
-            {pictures.Pictures.map(function(name, index){
+            {pictures.map(function(stuff, index){
               return (
                 <div key={index} className='flex-item'>
-                  <img className="picture" src={name} aria-hidden='' alt='' /><br/>
-                  <input name={"Pictures[" + index + "].url"} type="text" hidden/> 
+                  <img className="picture" src={stuff.result} aria-hidden='' alt='' /><br/>
+                  <input name={"Pictures[" + index + "].count"} ref={register({validate: value => value.String})} value={stuff.count} readOnly hidden/> 
                   <input name={"Pictures[" + index + "].value"} ref={register({
                   validate: value => value !== "admin" || "Nice try!"})} type="checkbox" /> 
                   Fish on picture
                 </div>
               );
             })}
+            {/* <img className="picture" src={pictures} aria-hidden='' alt='' /> */}
           </div>
           <button type="submit">Submit</button>
         </form>
@@ -70,5 +113,9 @@ function App() {
 //   )
 //   ;
 // }
+
+function hexToBase64(str) {
+  return btoa(String.fromCharCode.apply(null, str.replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" ")));
+}
 
 export default App;

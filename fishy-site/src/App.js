@@ -5,29 +5,29 @@ import './App.css';
 function App() {
   const { handleSubmit, register, errors } = useForm({});
   const [hasError, setErrors] = useState(false);
-  const [pictures, setPictures] = useState([]);
+  const [pictures, setPictures] = useState({"Pictures": []});
   
-  async function fetchData(count) {
-    await fetch("http://127.0.0.1:5000/" + count, {
+  async function fetchData() {
+    await fetch("http://127.0.0.1:5900/", {
       headers: {
         'Cache-Control': 'no-cache'
       }
     }).then(
       function(response){
-        console.log(count)
         response
-          .blob()
+          .json()
           .then(res => {
             console.log(res);
             // console.log("data:image/jpeg;base64," + hexToBase64(res));  
             // var hej = new Blob([res], {type: "image/jpeg"})
-            let fileReader = new FileReader();
-            fileReader.readAsDataURL(res); 
-            fileReader.onload = () => { 
-              let result = fileReader.result; 
-              console.log(result); 
-              setPictures(oldArray => [...oldArray, {result, count}]);
-            }; 
+            // let fileReader = new FileReader();
+            // fileReader.readAsDataURL(res); 
+            // fileReader.onload = () => { 
+            //   let result = fileReader.result; 
+            //   console.log(result); 
+            //   setPictures(oldArray => [...oldArray, {result, count}]);
+            // }; 
+            setPictures(res)
             // setPictures('data:image/jpeg;base64,' + hexToBase64(res));
             }
             )
@@ -44,9 +44,7 @@ function App() {
   
     useEffect(() =>
     {
-      for(var i = 0 ; i < 9; i++){
-        fetchData(i)
-      }
+        fetchData()
     }
   , []);
   
@@ -54,7 +52,7 @@ function App() {
 
   const onSubmit = values => {
     console.log(values)
-    fetch('http://127.0.0.1:5000/', {
+    fetch('http://127.0.0.1:5900/', {
 			method: 'POST',
 			body: JSON.stringify(values),
 			headers: {
@@ -73,22 +71,25 @@ function App() {
   return (
     <div>
       <header>
-        <h1>Do pictures contain fish or not</h1>
       </header>
       <div className="row">
       <div className="col-sm-2">
       </div>
       <div className="col-sm-8">
+      <h1>Do pictures contain fish or not</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-container">
-            {pictures.map(function(stuff, index){
+            {pictures.Pictures.map(function(stuff, index){
               return (
                 <div key={index} className='flex-item'>
-                  <img className="picture" src={stuff.result} aria-hidden='' alt='' /><br/>
-                  <input name={"Pictures[" + index + "].count"} ref={register({validate: value => value.String})} value={stuff.count} readOnly hidden/> 
-                  <input name={"Pictures[" + index + "].value"} ref={register({
+                  <img className="picture" src={stuff[1]} aria-hidden='' alt='' /><br/>
+                  <input name={"Pictures[" + index + "].filename"} ref={register({validate: value => value.String})} value={stuff[0]} readOnly hidden/> 
+                  <input name={"Pictures[" + index + "].fishCorrectOnpicture"} ref={register({
                   validate: value => value !== "admin" || "Nice try!"})} type="checkbox" /> 
-                  Fish on picture
+                  All fish label correctly on picture<br/>
+                  <input name={"Pictures[" + index + "].background"} ref={register({
+                  validate: value => value !== "somethign" || "like this"})} type="checkbox" /> 
+                  No fish on picture
                 </div>
               );
             })}

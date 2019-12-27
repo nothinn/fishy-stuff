@@ -30,4 +30,4 @@ The content of this folder is what we used from the reference work by Peter Mør
 **/scripts/API.py** The API that feeds images to the front end. Only images where fish are detected are shown send to the front end.
 **/fishy-site** The front end for showing images. The front end is created in React. If node js is installed the front end can be run by doing "npm start" inside the "fishy-site" folder. The API then also has be started up the acutally get images.
 
-**/scripts/filter1.py** Normalizes all images in a folder and saves the result in another folder. These images are used in the front end for easier evaluation.
+**/scripts/filter1.py** Normalizes all images in a folder and saves the normalized images in another folder. These images are used in the front end for easier evaluation.

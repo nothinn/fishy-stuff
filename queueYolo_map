@@ -1,0 +1,24 @@
+#!/bin/bash
+#BSUB -q gpuv100
+#BSUB -J yoloTrain_noback
+#BSUB -n 2
+#BSUB -gpu "num=1:mode=exclusive_process"
+#BSUB -W 4:00
+#BSUB -R "rusage[mem=10GB]"
+#BSUB -u sitan@dtu.dk
+#BSUB -B
+#BSUB -N
+#BSUB -B
+#BSUB -o gpu-%J.out
+#BSUB -e gpu-%J.err
+
+#bsub -R "select[gpu16gb]"
+
+nvidia-smi
+module load cuda/9.0
+module load cudnn/v7.0.5-prod-cuda-9.0
+module load opencv/3.2.0
+
+cd darknet/
+./darknet detector map ../cfg/fish_green.data ../cfg/yolov3-fish1.cfg backup/first_best.weights
+# -ext_output -dont_show -out /work1/s154227/videos/result.json < /work1/s154227/data/fish_valid.txt

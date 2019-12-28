@@ -1,0 +1,5 @@
+classes= 1
+train  = /work1/s154227/data/fish_train.txt
+valid  = /work1/s154227/data/fish_valid.txt
+names = ../cfg/fishOne.names
+backup = backup

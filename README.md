@@ -34,6 +34,13 @@ The content of this folder is what we used from the reference work by Peter Mør
 **/scripts/filter1.py** Normalizes all images in a folder and saves the normalized images in another folder. These images are used in the front end for easier evaluation.
 
 
+**/scripts/YOLO/fish_label.py** Reads in files and can generate the label format needed for darknet. Also generates the training and validation set for the fish images. This also allows for adding other datasets.
+
+**/scripts/YOLO/add_from_network.py** Takes the generated JSON files and adds the images annotated as background and correctly labeled to the training set.
+
+**/scripts/YOLO/bb_show.py** Takes a JSON file generated after inference and draws bounding boxes with confidence under. This one takes two JSON files and draws red boxes around the detected objects from the first JSON file and blue boxes for the second JSON file. The images are stored in the folder the script was called from.
+
+
 # YOLO
 Darknet has been added as a git submodule. Make sure the darknet submodule is downloaded:
 
@@ -53,6 +60,10 @@ This can also be called directly, if using an interactive node:
     $ ./queueYolo
 
 
+## Pre-trained network
+
+The weights for the trained networks used in the paper are available in the weights folder.
+
 ## Inference
 
 To perform inference on all the extracted images from all the videos, queue up using:
@@ -68,3 +79,4 @@ or from an interactive node:
 To calculate the mean average precision on the validation set, call:
 
     $ ./queueYolo_map
+

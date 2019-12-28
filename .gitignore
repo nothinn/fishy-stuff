@@ -36,3 +36,7 @@ resultNetworksJson/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+logs/
+scripts/YOLO/*.jpg
